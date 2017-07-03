@@ -102,7 +102,7 @@ $(document).ready(function() {
           Model[bars]['id'] +
           "?client_id=S5443SP2CFGGGTMRFYB54B4ZDZYKWIFBE0RIFITOSTAQEUYO" +
           "&client_secret=MXIYMGA5TAFG23QI3V4VYIEER4P5DVU4HL0PEIY502URMWE1" +
-          "&v=20170701";
+          "&v=20170702";
 
         $.getJSON(url, function(data) {
           if (data.response.venue) {
