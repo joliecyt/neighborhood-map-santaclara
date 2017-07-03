@@ -1,0 +1,54 @@
+#map-container {
+  width: 80%;
+  height: 600px;
+  background-color: grey;
+  position: relative;
+  float: right;
+  margin-left: 5px;
+}
+
+#search-area {
+  width: 100%;
+  height: 40px;
+
+}
+
+.search-box {
+  height: 20px;
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+#list-menu {
+  width: 19%;
+  display: block;
+  position: fixed;
+  margin-right: 2px;
+  border: 1px solid grey;
+  border-radius: 5px 5px 5px 5px;
+}
+
+.location-list {
+  padding: 0;
+  margin: 5px;
+}
+
+li {
+  list-style-type: none;
+  font-family: Arial;
+  padding: 4px;
+  color: dark-grey;
+}
+
+li:hover {
+  background: #ddd;
+}
+
+h1 {
+  float: right;
+  position: relative;
+  margin: 0;
+  font-size: 40px;
+  font-family: 'Bangers', sans-serif;
+
+}
