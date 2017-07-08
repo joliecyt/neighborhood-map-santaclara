@@ -77,7 +77,7 @@ $(document).ready(function() {
 
     self.onClick = function(item) {
       mainPlace(item, self.map());
-    }
+    };
   };
 
     // methods
@@ -99,7 +99,7 @@ $(document).ready(function() {
 
       for (var bars in Model) {
         url = "https://api.foursquare.com/v2/venues/" +
-          Model[bars]['id'] +
+          Model[bars].id +
           "?client_id=S5443SP2CFGGGTMRFYB54B4ZDZYKWIFBE0RIFITOSTAQEUYO" +
           "&client_secret=MXIYMGA5TAFG23QI3V4VYIEER4P5DVU4HL0PEIY502URMWE1" +
           "&v=20170702";
@@ -124,12 +124,12 @@ $(document).ready(function() {
             // run place markers
             placeMarkers(allPlaces, bars, info, map, infoWindow);
           } else {
-            alert("An error occured. Please refresh.")
+            alert("An error occured. Please refresh.");
             return;
           }
         });
       }
-    };
+    }
 
   function placeMarkers(allPlaces, bars, info, map, infoWindow) {
     var point = new google.maps.LatLng(info.lat, info.lng);
