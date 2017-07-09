@@ -53,6 +53,8 @@ $(document).ready(function() {
 
     // initialize map
     var map = initMap();
+
+
     // initialize infoWindow
     var infoWindow = new google.maps.InfoWindow();
 
@@ -92,8 +94,11 @@ $(document).ready(function() {
     };
   };
 
-    // methods
     function initMap() {
+      this.onerror = function() {
+        alert("google maps could not be loaded. Please refresh.");
+      }
+
       var startingPos = {lat: 37.3708905, lng: -121.9675525};
       var mapData = {
         center: startingPos,
@@ -101,8 +106,6 @@ $(document).ready(function() {
       };
       return new google.maps.Map(document.getElementById('map-container'), mapData);
     }
-
-
 
     function initFoursquare(allPlaces, map) {
       var url = "";
@@ -120,32 +123,30 @@ $(document).ready(function() {
     }
 
     function getJSON(url, allPlaces, map, infoWindow) {
-        var info = [];
+      var info = [];
 
-        $.getJSON(url, function(data) {
-          if (data.response.venue) {
-            var entry = data.response.venue;
-            // push search result into locations array
-            allPlaces.push(entry);
-            // save needed data for google maps into an object
-            info = {
-              lat: entry.location.lat,
-              lng: entry.location.lng,
-              name: entry.name,
-              address: entry.location.address + ", " +
-                       entry.location.city + ", " +
-                       entry.location.state + ", " +
-                       entry.location.postalCode,
-              website: entry.url,
-              foursquareSite: entry.canonicalUrl
-            };
-            // run place markers
-            placeMarkers(allPlaces, info, map, infoWindow);
-          } else {
-            alert("An error occured. Please refresh.");
-            return;
-          }
-        });
+      var jqxhr = $.getJSON(url, function(data) {
+        var entry = data.response.venue;
+        // push search result into locations array
+        allPlaces.push(entry);
+        // save needed data for google maps into an object
+        info = {
+          lat: entry.location.lat,
+          lng: entry.location.lng,
+          name: entry.name,
+          address: entry.location.address + ", " +
+                   entry.location.city + ", " +
+                   entry.location.state + ", " +
+                   entry.location.postalCode,
+          website: entry.url,
+          foursquareSite: entry.canonicalUrl
+        };
+
+        // run place markers
+        placeMarkers(allPlaces, info, map, infoWindow);
+      }).fail(function() {
+        alert("An error occurred. Please refresh.");
+      });
     }
 
   function placeMarkers(allPlaces, info, map, infoWindow) {
