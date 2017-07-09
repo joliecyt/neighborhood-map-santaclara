@@ -46,7 +46,7 @@ $(document).ready(function() {
   var viewModel = function() {
 
     var self = this;
-    //self.markers = ko.observableArray();
+
     self.allPlaces = ko.observableArray();
     self.filter = ko.observable("");
 
@@ -94,7 +94,6 @@ $(document).ready(function() {
 
     function initFoursquare(allPlaces, map) {
       var url = "";
-      var info = [];
       var infoWindow = new google.maps.InfoWindow();
 
       for (var bars in Model) {
@@ -103,6 +102,13 @@ $(document).ready(function() {
           "?client_id=S5443SP2CFGGGTMRFYB54B4ZDZYKWIFBE0RIFITOSTAQEUYO" +
           "&client_secret=MXIYMGA5TAFG23QI3V4VYIEER4P5DVU4HL0PEIY502URMWE1" +
           "&v=20170702";
+
+        getJSON(url, allPlaces, map, infoWindow);
+      }
+    }
+
+    function getJSON(url, allPlaces, map, infoWindow) {
+        var info = [];
 
         $.getJSON(url, function(data) {
           if (data.response.venue) {
@@ -122,16 +128,15 @@ $(document).ready(function() {
               foursquareSite: entry.canonicalUrl
             };
             // run place markers
-            placeMarkers(allPlaces, bars, info, map, infoWindow);
+            placeMarkers(allPlaces, info, map, infoWindow);
           } else {
             alert("An error occured. Please refresh.");
             return;
           }
         });
-      }
     }
 
-  function placeMarkers(allPlaces, bars, info, map, infoWindow) {
+  function placeMarkers(allPlaces, info, map, infoWindow) {
     var point = new google.maps.LatLng(info.lat, info.lng);
     var restaurantSite = "";
     var altSite ="Foursquare Page";
@@ -150,7 +155,6 @@ $(document).ready(function() {
     });
 
 
-    //markers.push(marker);
     allPlaces()[allPlaces().length - 1].marker = marker;
 
     marker.addListener('click', function() {
