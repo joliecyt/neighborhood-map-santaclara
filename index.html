@@ -15,10 +15,13 @@
 
   <hr>
 
-  <div id="list-menu">
-    <ul class="location-list" data-bind="foreach: searchUpdate">
-      <li data-bind="text: name, click: $root.onClick"></li>
-    <ul>
+  <button class="hamburger" data-bind="click: $root.hamburgerClick">&#9776;</button>
+  <div class="sidenav">
+    <div class="list-menu">
+      <ul class="location-list" data-bind="foreach: searchUpdate">
+        <li data-bind="text: name, click: $root.onClick"></li>
+      <ul>
+    </div>
   </div>
 
   <div id="map-container"></div>

@@ -56,6 +56,17 @@ $(document).ready(function() {
 
     self.map = ko.observable(map);
 
+    // hide menu
+
+    // Hamburger function
+    self.hamburgerClick = function() {
+      if ($(".sidenav").css("width") == "0px") {
+        $(".sidenav").css("width", "250px");
+      } else {
+        $(".sidenav").css("width", "0px");
+      }
+    }
+
     // gather info of model and place markers/info
     initFoursquare(self.allPlaces, self.map());
 
