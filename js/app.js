@@ -53,10 +53,11 @@ $(document).ready(function() {
 
     // initialize map
     var map = initMap();
+    // initialize infoWindow
+    var infoWindow = new google.maps.InfoWindow();
 
     self.map = ko.observable(map);
-
-    // hide menu
+    self.infoWindow = ko.observable(infoWindow);
 
     // Hamburger function
     self.hamburgerClick = function() {
@@ -87,7 +88,7 @@ $(document).ready(function() {
     }, self);
 
     self.onClick = function(item) {
-      mainPlace(item, self.map());
+      mainPlace(item, self.map(), self.infoWindow());
     };
   };
 
@@ -169,13 +170,23 @@ $(document).ready(function() {
     allPlaces()[allPlaces().length - 1].marker = marker;
 
     marker.addListener('click', function() {
-      //close opened infoWindows
       infoWindow.setContent(marker.content);
       infoWindow.open(map, marker);
+      //add animation to marker
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function() {
+        marker.setAnimation(null);
+      }, 1450);
     });
   }
 
-  function mainPlace(item, map) {
+
+  function mainPlace(item, map, infoWindow) {
+    var marker = item.marker;
+    //show infoWindows
+    infoWindow.setContent(marker.content);
+    infoWindow.open(map, marker);
+    //center map
     map.setCenter(new google.maps.LatLng(item.location.lat, item.location.lng));
     map.setZoom(14);
   }
