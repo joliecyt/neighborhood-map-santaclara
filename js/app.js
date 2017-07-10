@@ -1,5 +1,3 @@
-$(document).ready(function() {
-
   var Model = [
     {
       "name": "Bella's Bar and Grill",
@@ -43,24 +41,17 @@ $(document).ready(function() {
     }
   ];
 
-  var viewModel = function() {
+  // make initMap global so it can be called
+  var map, infoWindow;
 
+  var viewModel = function() {
     var self = this;
 
     self.allPlaces = ko.observableArray();
     self.filter = ko.observable("");
 
-
-    // initialize map
-    var map = initMap();
-
-
-    // initialize infoWindow
-    var infoWindow = new google.maps.InfoWindow();
-
-    self.map = ko.observable(map);
-    self.infoWindow = ko.observable(infoWindow);
-
+    //self.map = ko.observable(map);
+    //self.infoWindow = ko.observable(infoWindow);
     // Hamburger function
     self.hamburgerClick = function() {
       if ($(".sidenav").css("width") == "0px") {
@@ -68,11 +59,10 @@ $(document).ready(function() {
       } else {
         $(".sidenav").css("width", "0px");
       }
-    }
+    };
 
     // gather info of model and place markers/info
-    initFoursquare(self.allPlaces, self.map());
-
+    initFoursquare(self.allPlaces);
     // manipulate info/marker display from user search entry
     self.searchUpdate = ko.computed(function() {
       return ko.utils.arrayFilter(self.allPlaces(), function(item) {
@@ -90,66 +80,64 @@ $(document).ready(function() {
     }, self);
 
     self.onClick = function(item) {
-      mainPlace(item, self.map(), self.infoWindow());
+      mainPlace(item);
     };
   };
 
-    function initMap() {
-      this.onerror = function() {
-        alert("google maps could not be loaded. Please refresh.");
-      }
+  initMap = () => {
+    var startingPos = {lat: 37.3708905, lng: -121.9675525};
 
-      var startingPos = {lat: 37.3708905, lng: -121.9675525};
-      var mapData = {
-        center: startingPos,
-        zoom: 12
+    map = new google.maps.Map(document.getElementById('map-container'), {
+      center: startingPos,
+      zoom: 12
+    });
+
+    infoWindow = new google.maps.InfoWindow();
+  };
+
+  mapError = () => {
+    alert("google maps could not be loaded. Please refresh.");
+  };
+
+  function initFoursquare(allPlaces) {
+    var url = "";
+    for (var bars in Model) {
+      url = "https://api.foursquare.com/v2/venues/" +
+        Model[bars].id +
+        "?client_id=S5443SP2CFGGGTMRFYB54B4ZDZYKWIFBE0RIFITOSTAQEUYO" +
+        "&client_secret=MXIYMGA5TAFG23QI3V4VYIEER4P5DVU4HL0PEIY502URMWE1" +
+        "&v=20170702";
+      getJSON(url, allPlaces);
+    }
+  }
+
+  function getJSON(url, allPlaces) {
+    var info = [];
+    var jqxhr = $.getJSON(url, function(data) {
+      var entry = data.response.venue;
+      // push search result into locations array
+      allPlaces.push(entry);
+      // save needed data for google maps into an object
+      info = {
+        lat: entry.location.lat,
+        lng: entry.location.lng,
+        name: entry.name,
+        address: entry.location.address + ", " +
+                 entry.location.city + ", " +
+                 entry.location.state + ", " +
+                 entry.location.postalCode,
+        website: entry.url,
+        foursquareSite: entry.canonicalUrl
       };
-      return new google.maps.Map(document.getElementById('map-container'), mapData);
-    }
 
-    function initFoursquare(allPlaces, map) {
-      var url = "";
-      var infoWindow = new google.maps.InfoWindow();
+      // run place markers
+      placeMarkers(allPlaces, info);
+    }).fail(function() {
+      alert("An error occurred. Please refresh.");
+    });
+  }
 
-      for (var bars in Model) {
-        url = "https://api.foursquare.com/v2/venues/" +
-          Model[bars].id +
-          "?client_id=S5443SP2CFGGGTMRFYB54B4ZDZYKWIFBE0RIFITOSTAQEUYO" +
-          "&client_secret=MXIYMGA5TAFG23QI3V4VYIEER4P5DVU4HL0PEIY502URMWE1" +
-          "&v=20170702";
-
-        getJSON(url, allPlaces, map, infoWindow);
-      }
-    }
-
-    function getJSON(url, allPlaces, map, infoWindow) {
-      var info = [];
-
-      var jqxhr = $.getJSON(url, function(data) {
-        var entry = data.response.venue;
-        // push search result into locations array
-        allPlaces.push(entry);
-        // save needed data for google maps into an object
-        info = {
-          lat: entry.location.lat,
-          lng: entry.location.lng,
-          name: entry.name,
-          address: entry.location.address + ", " +
-                   entry.location.city + ", " +
-                   entry.location.state + ", " +
-                   entry.location.postalCode,
-          website: entry.url,
-          foursquareSite: entry.canonicalUrl
-        };
-
-        // run place markers
-        placeMarkers(allPlaces, info, map, infoWindow);
-      }).fail(function() {
-        alert("An error occurred. Please refresh.");
-      });
-    }
-
-  function placeMarkers(allPlaces, info, map, infoWindow) {
+  function placeMarkers(allPlaces, info) {
     var point = new google.maps.LatLng(info.lat, info.lng);
     var restaurantSite = "";
     var altSite ="Foursquare Page";
@@ -181,8 +169,7 @@ $(document).ready(function() {
     });
   }
 
-
-  function mainPlace(item, map, infoWindow) {
+  function mainPlace(item) {
     var marker = item.marker;
     //show infoWindows
     infoWindow.setContent(marker.content);
@@ -193,4 +180,3 @@ $(document).ready(function() {
   }
 
   ko.applyBindings(new viewModel());
-});
