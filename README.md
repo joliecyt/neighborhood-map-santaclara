@@ -8,6 +8,7 @@ This is a Udacity front-end nanodegree project which shows list of bars in Santa
 * KnockoutJS
 
 ## Instruction
+* Open index.html in a web browser
 * Webpage loads with list of bars and a map with markers of their locations.
 * InfoWindow: User may click on each marker to find out about additional information.
 * Filter List: User may search by name. The list will continuously update as user type in the name.
