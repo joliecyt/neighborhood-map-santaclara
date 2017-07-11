@@ -20,23 +20,16 @@
   margin-top: 5px;
 }
 
-.sidenav {
-  display: block;
-  height: 100%;
-  position: fixed;
-  width: 0;
-  transition: 0.5s;
-  z-index: 1;
-
-}
-
-.sidenav .list-menu {
+.sidenav-open .list-menu {
   display: block;
   margin-right: 2px;
   border-radius: 5px 5px 5px 5px;
   background-color: #199;
   overflow: scroll;
-  top: 0%;
+  width: 250px;
+  transition: 0.5;
+  position: fixed;
+  z-index: 1;
 }
 
 .location-list {
@@ -59,7 +52,7 @@ h1 {
   float: right;
   position: relative;
   margin: 0;
-  font-size: 40px;
-  font-family: 'Bangers', sans-serif;
+  font-size: 25px;
+  font-family: 'Alef', sans-serif;
 
 }

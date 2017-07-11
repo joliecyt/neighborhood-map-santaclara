@@ -44,21 +44,15 @@
   // make initMap global so it can be called
   var map, infoWindow;
 
-  var viewModel = function() {
+  var viewmodel = function() {
     var self = this;
 
     self.allPlaces = ko.observableArray();
     self.filter = ko.observable("");
 
-    //self.map = ko.observable(map);
-    //self.infoWindow = ko.observable(infoWindow);
-    // Hamburger function
+    self.sidenavToggle = ko.observable(false);
     self.hamburgerClick = function() {
-      if ($(".sidenav").css("width") == "0px") {
-        $(".sidenav").css("width", "250px");
-      } else {
-        $(".sidenav").css("width", "0px");
-      }
+      self.sidenavToggle(!self.sidenavToggle());
     };
 
     // gather info of model and place markers/info
@@ -165,7 +159,7 @@
       marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(function() {
         marker.setAnimation(null);
-      }, 1450);
+      }, 1400);
     });
   }
 
@@ -177,6 +171,11 @@
     //center map
     map.setCenter(new google.maps.LatLng(item.location.lat, item.location.lng));
     map.setZoom(14);
+    //add animation to marker
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function() {
+      marker.setAnimation(null);
+    }, 1400);
   }
 
-  ko.applyBindings(new viewModel());
+  ko.applyBindings(new viewmodel());
